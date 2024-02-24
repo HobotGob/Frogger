@@ -3,14 +3,21 @@ import pygame
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups):
         super().__init__(groups)
-        self.image = pygame.Surface((50,50))
-        self.image.fill('red')
+
+        self.import_assets()
+        self.frame_index = 0
+        self.image = self.animation[self.frame_index]
         self.rect = self.image.get_rect(center = pos)
 
         # float movement
         self.pos = pygame.math.Vector2(self.rect.center)
         self.direction = pygame.math.Vector2()
         self.speed = 200
+
+    def import_assets(self):
+        path = '../Frogger/graphics/player/right/'
+        self.animation = [pygame.image.load(f'{path}{frame}.png').convert_alpha() for frame in range(4)]
+        print(self.animation)
 
     def move(self,dt):
 
@@ -20,7 +27,6 @@ class Player(pygame.sprite.Sprite):
 
         self.pos += self.direction * self.speed * dt
         self.rect.center = round(self.pos.x), round(self.pos.y)
-
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -42,8 +48,14 @@ class Player(pygame.sprite.Sprite):
         else:
             self.direction.y = 0
 
+    def animate(self,dt):
+        self.frame_index += 10 * dt
+        if self.frame_index >= len(self.animation):
+            self.frame_index = 0
+        self.image = self.animation[int(self.frame_index)]
 
     def update(self,dt):
         self.input()
         self.move(dt)
+        self.animate(dt)
 
