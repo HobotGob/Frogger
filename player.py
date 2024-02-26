@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         # float movement
         self.pos = pygame.math.Vector2(self.rect.center)
         self.direction = pygame.math.Vector2()
-        self.speed = 200
+        self.speed = 75
 
     def import_assets(self):
         self.animations = {}
