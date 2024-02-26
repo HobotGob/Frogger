@@ -2,6 +2,7 @@ import pygame, sys
 from settings import *
 from player import Player
 from Car import Car
+from random import choice, randint
 
 
 class AllSprites(pygame.sprite.Group):
@@ -9,7 +10,7 @@ class AllSprites(pygame.sprite.Group):
         super().__init__()
         self.offset = pygame.math.Vector2()
         self.bg = pygame.image.load('../Frogger/graphics/main/map_2.png').convert()
-        self.fg = pygame.image.load('../Frogger/graphics/main/overlay.png').convert_alpha()
+        self.fg = pygame.image.load('../Frogger/graphics/main/overlay_2.png').convert_alpha()
 
     def customize_draw(self):
         # change the offset vector
@@ -37,7 +38,11 @@ all_sprites = AllSprites()
 
 # sprites
 player = Player((600, 400), all_sprites)
-car = Car((600, 200), all_sprites)
+
+# timer
+car_timer = pygame.event.custom_type()
+pygame.time.set_timer(car_timer, 50)
+pos_list = []
 
 # game loop
 while True:
@@ -47,6 +52,17 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        if event.type == car_timer:
+            random_pos = choice(CAR_START_POSITIONS)
+            if random_pos not in pos_list:
+                pos_list.append(random_pos)
+                pos = (random_pos[0],random_pos[1] + randint(-8,8))
+                Car(pos,all_sprites)
+            if len(pos_list) > 5:
+                del pos_list[0]
+
+
+
 
     # delta time
     dt = clock.tick() / 1000
@@ -58,8 +74,8 @@ while True:
     all_sprites.update(dt)
 
     # draw
-    # all_sprites.draw(display_surface)
+    # all_sprites.draw
     all_sprites.customize_draw()
 
-    # update the display surface -> drawing the frame
+    # update the display surface
     pygame.display.update()
