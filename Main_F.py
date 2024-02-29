@@ -45,6 +45,15 @@ car_timer = pygame.event.custom_type()
 pygame.time.set_timer(car_timer, 50)
 pos_list = []
 
+# font
+font = pygame.font.Font(None, 50)
+text_surf = font.render('You Won!',True,'White')
+text_rect = text_surf.get_rect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
+
+# music
+music = pygame.mixer.Sound('../Frogger/audio/music.mp3')
+music.play(loops = -1)
+
 # game loop
 while True:
 
@@ -71,12 +80,17 @@ while True:
     # draw a bg
     display_surface.fill('black')
 
-    # update
-    all_sprites.update(dt)
+    if player.pos.y >= 580:
 
-    # draw
-    # all_sprites.draw
-    all_sprites.customize_draw()
+        # update
+        all_sprites.update(dt)
+
+        # draw
+        # all_sprites.draw
+        all_sprites.customize_draw()
+    else:
+        display_surface.fill('teal')
+        display_surface.blit(text_surf,text_rect)
 
     # update the display surface
     pygame.display.update()
