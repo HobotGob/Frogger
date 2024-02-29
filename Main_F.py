@@ -80,7 +80,7 @@ while True:
     # draw a bg
     display_surface.fill('black')
 
-    if player.pos.y >= 580:
+    if player.pos.y >= 400:
 
         # update
         all_sprites.update(dt)
